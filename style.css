@@ -37,6 +37,8 @@ h1 {
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
+
+    overflow: hidden;
 }
 
 .buttons {

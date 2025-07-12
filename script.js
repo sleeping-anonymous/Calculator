@@ -10,10 +10,7 @@ const operators = "+-*/";
 
 function calculate(str) {
     prev = parseFloat(prev);
-    console.log(typeof operatorIndex);
-    console.log(`${operatorIndex} ${operator}`);
     current = parseFloat(str.slice(operatorIndex + 1));
-    console.log(`${prev} ${current} ${operator}`)
     switch (operator) {
         case "+": result.textContent = `${prev + current}`;
             prev = prev + current;
@@ -99,13 +96,30 @@ function operatorClick(e) {
 }
 
 function dotClick(e) {
-    if (result.textContent.at(-1) === ".") {
-        return;
+    if (operator) {
+        const currentNo = result.textContent.split(/[\+\-\*\/]/).pop();   // breaks text to 2 parts before and after operator using regex  and prev is popped
+        console.log(currentNo);
+        if (currentNo.includes(".")) {
+            return;
+        }
+        else {
+            result.textContent += e.target.textContent;
+
+        }
     }
     else {
+        if (result.textContent.includes(".")) {
+            console.log("1");
+            return;
+        }
+        console.log("2");
         result.textContent += e.target.textContent;
 
+
     }
+
+
+
 }
 
 function clearClick() {
