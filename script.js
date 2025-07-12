@@ -1,35 +1,56 @@
 let prev = "";
 let current = "";
 let operator = "";
+let operatorIndex = -1;
 
 const btns = document.querySelectorAll("button");
 const result = document.querySelector(".result");
 result.textContent = "";
 const operators = "+-*/";
 
-// function calculate(str) {
-//     let arr = str.split(" ");
-//     console.log(arr);
-//     prev = parseFloat(arr[0]);
-//     current = parseFloat(arr[2]);
-//     operator = arr[1];
-//     console.log(`${prev} ${current} ${operator}`)
-//     switch (operator) {
-//         case "+": return prev + current;  // no need for breaks since return used 
+function calculate(str) {
+    prev = parseFloat(prev);
+    console.log(typeof operatorIndex);
+    console.log(`${operatorIndex} ${operator}`);
+    current = parseFloat(str.slice(operatorIndex + 1));
+    console.log(`${prev} ${current} ${operator}`)
+    switch (operator) {
+        case "+": result.textContent = `${prev + current}`;
+            prev = prev + current;
+            current = "";
+            operator = "";
+            operatorIndex = -1;
+            break;
 
-//         case "-": return prev - current;
+        case "-": result.textContent = `${prev - current}`;
+            prev = prev - current;
+            current = "";
+            operator = "";
+            operatorIndex = -1;
+            break;
 
-//         case "*": return prev * current;
+        case "*": result.textContent = `${prev * current}`;
+            prev = prev * current;
+            current = "";
+            operator = "";
+            operatorIndex = -1;
+            break;
 
-//         case "/": if (current === 0) {
-//             return "can't divide by zero";
-//         }
-//         else {
-//             return (prev / current).toFixed(5);
-//         }
+        case "/": if (current === 0) {
+            return "can't divide by zero";
+        }
+        else {
+            result.textContent = `${(prev / current).toFixed(5)}`;
+            prev = parseFloat((prev / current).toFixed(5));
+            current = "";
+            operator = "";
+            operatorIndex = -1;
+            break;
+        }
+        default: result.textContent = `Wrong Input`;
 
-//     }
-// }
+    }
+}
 
 btns.forEach(btn => {
     btn.addEventListener("click", function (e) {
@@ -48,25 +69,43 @@ btns.forEach(btn => {
         else if (btn.classList.contains("del")) {
             deleteClick(e);
         }
+        else if (btn.classList.contains("dot")) {
+            dotClick(e);
+        }
         else {
-            calculate();
+            calculate(result.textContent);
         }
     })
 })
 
 function operatorClick(e) {
+    if (operator && !operators.includes(result.textContent.at(-1))) {
+        calculate(result.textContent);
+    }
     const display = result.textContent;
     const lastChar = display.charAt(display.length - 1);
     if (operators.includes(lastChar)) {
         result.textContent = display.slice(0, -1) + e.target.textContent; // returns complete display excluding the last element (-1 here)
         operator = e.target.textContent;
+
     }
     else {
         prev = display;
         result.textContent += e.target.textContent;
         operator = e.target.textContent;
 
-    } console.log(operator);
+    }
+    operatorIndex = result.textContent.length - 1;
+}
+
+function dotClick(e) {
+    if (result.textContent.at(-1) === ".") {
+        return;
+    }
+    else {
+        result.textContent += e.target.textContent;
+
+    }
 }
 
 function clearClick() {
