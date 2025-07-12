@@ -12,21 +12,21 @@ function calculate(str) {
     prev = parseFloat(prev);
     current = parseFloat(str.slice(operatorIndex + 1));
     switch (operator) {
-        case "+": result.textContent = `${prev + current}`;
+        case "+": result.textContent = formatResult(prev + current);
             prev = prev + current;
             current = "";
             operator = "";
             operatorIndex = -1;
             break;
 
-        case "-": result.textContent = `${prev - current}`;
+        case "-": result.textContent = formatResult(prev - current);
             prev = prev - current;
             current = "";
             operator = "";
             operatorIndex = -1;
             break;
 
-        case "*": result.textContent = `${prev * current}`;
+        case "*": result.textContent = formatResult(prev * current);
             prev = prev * current;
             current = "";
             operator = "";
@@ -34,10 +34,11 @@ function calculate(str) {
             break;
 
         case "/": if (current === 0) {
-            return "can't divide by zero";
+            result.textContent = `can't divide by zero`;
+            break;
         }
         else {
-            result.textContent = `${(prev / current).toFixed(5)}`;
+            result.textContent = formatResult(prev / current);
             prev = parseFloat((prev / current).toFixed(5));
             current = "";
             operator = "";
@@ -98,24 +99,18 @@ function operatorClick(e) {
 function dotClick(e) {
     if (operator) {
         const currentNo = result.textContent.split(/[\+\-\*\/]/).pop();   // breaks text to 2 parts before and after operator using regex  and prev is popped
-        console.log(currentNo);
         if (currentNo.includes(".")) {
             return;
         }
         else {
             result.textContent += e.target.textContent;
-
         }
     }
     else {
         if (result.textContent.includes(".")) {
-            console.log("1");
             return;
         }
-        console.log("2");
         result.textContent += e.target.textContent;
-
-
     }
 
 
@@ -133,3 +128,7 @@ function deleteClick(e) {
     result.textContent = result.textContent.slice(0, -1);
 }
 
+function formatResult(num) {
+    const rounded = parseFloat(num.toFixed(5));   // removes trailing zeroes if more are there 
+    return rounded;
+}
