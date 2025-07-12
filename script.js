@@ -8,6 +8,8 @@ const result = document.querySelector(".result");
 result.textContent = "";
 const operators = "+-*/";
 
+const MAX_CHARS = 17;
+
 function calculate(str) {
     prev = parseFloat(prev);
     current = parseFloat(str.slice(operatorIndex + 1));
@@ -73,9 +75,10 @@ btns.forEach(btn => {
 })
 
 function numberClick(e) {
-    result.textContent += e.target.textContent;
+    if (result.textContent.length < MAX_CHARS) {
+        result.textContent += e.target.textContent;
+    }
 }
-
 function operatorClick(e) {
     if (operator && !operators.includes(result.textContent.at(-1))) {
         calculate(result.textContent);
@@ -96,6 +99,7 @@ function operatorClick(e) {
 }
 
 function dotClick(e) {
+    if (result.textContent.length >= MAX_CHARS) return;
     if (operator) {
         const currentNo = result.textContent.split(/[\+\-\*\/]/).pop();   // breaks text to 2 parts before and after operator using regex  and prev is popped
         if (currentNo.includes(".")) {

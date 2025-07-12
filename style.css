@@ -38,6 +38,8 @@ h1 {
     justify-content: flex-end;
     align-items: flex-end;
 
+    white-space: nowrap;
+    /* forces all text onto one line . */
     overflow: hidden;
 }
 
