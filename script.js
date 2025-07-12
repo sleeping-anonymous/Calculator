@@ -46,20 +46,16 @@ function calculate(str) {
             break;
         }
         default: result.textContent = `Wrong Input`;
-
     }
 }
 
 btns.forEach(btn => {
     btn.addEventListener("click", function (e) {
         if (btn.classList.contains("number")) {
-
-            console.log(e.target);
-            result.textContent += e.target.textContent;
+            numberClick(e);
         }
         else if (btn.classList.contains("operators")) {
             operatorClick(e);
-
         }
         else if (btn.classList.contains("clear")) {
             clearClick();
@@ -76,6 +72,10 @@ btns.forEach(btn => {
     })
 })
 
+function numberClick(e) {
+    result.textContent += e.target.textContent;
+}
+
 function operatorClick(e) {
     if (operator && !operators.includes(result.textContent.at(-1))) {
         calculate(result.textContent);
@@ -91,7 +91,6 @@ function operatorClick(e) {
         prev = display;
         result.textContent += e.target.textContent;
         operator = e.target.textContent;
-
     }
     operatorIndex = result.textContent.length - 1;
 }
@@ -112,9 +111,6 @@ function dotClick(e) {
         }
         result.textContent += e.target.textContent;
     }
-
-
-
 }
 
 function clearClick() {
@@ -131,4 +127,30 @@ function deleteClick(e) {
 function formatResult(num) {
     const rounded = parseFloat(num.toFixed(5));   // removes trailing zeroes if more are there 
     return rounded;
+}
+
+
+document.addEventListener("keydown", keyboardSupport);
+
+function keyboardSupport(e) {
+    const key = e.key;
+    if (!isNaN(key)) { // is a number
+        numberClick({ target: { textContent: key } });
+    }
+    else if (operators.includes(key)) {
+        operatorClick({ target: { textContent: key } });   // since fxn needs e.target.textContent = "+" . it provides that
+    }
+    else if (key === "Enter" || key === "=") {
+        calculate(result.textContent);
+    }
+    else if (key === "Backspace") {
+        deleteClick();
+    }
+    else if (key === "Escape") {
+        clearClick();
+    }
+    else if (key === ".") {
+        dotClick({ target: { textContent: key } });
+    }
+
 }
