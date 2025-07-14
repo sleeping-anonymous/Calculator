@@ -53,6 +53,8 @@ function calculate(str) {
 
 btns.forEach(btn => {
     btn.addEventListener("click", function (e) {
+        btn.blur();
+
         if (btn.classList.contains("number")) {
             numberClick(e);
         }
